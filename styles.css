@@ -33,6 +33,7 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 img{max-width:100%;display:block}
+body.nav-open{overflow:hidden}
 a{color:inherit}
 .wrap{max-width:1120px;margin:0 auto;padding:0 1.5rem}
 
@@ -110,6 +111,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--terracotta-dark);ou
   padding:1.1rem 1.5rem;
   gap:1rem;
 }
+@media (max-width:480px){
+  .header-inner{padding:.85rem 1.1rem}
+}
 .logo{
   font-family:var(--font-serif);
   font-size:1.3rem;
@@ -128,34 +132,48 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--terracotta-dark);ou
 .nav a:hover::after{width:100%}
 .nav-toggle{
   display:none;align-items:center;justify-content:center;
-  width:2.4rem;height:2.4rem;border:none;background:none;cursor:pointer;
-  font-size:1.5rem;color:var(--brown);
+  width:2.75rem;height:2.75rem;border:none;background:none;cursor:pointer;
+  font-size:1.6rem;color:var(--brown);flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
 }
 .nav-toggle i{transition:transform .25s var(--ease)}
 .nav-toggle[aria-expanded="true"] i{transform:rotate(90deg)}
-.mobile-nav{
-  display:grid;grid-template-rows:0fr;
-  overflow:hidden;
-  transition:grid-template-rows .3s var(--ease);
-}
+
+/* Mobile nav: hidden entirely outside the mobile breakpoint so it can never
+   leak into the desktop layout, animated with max-height only when active. */
+.mobile-nav{display:none}
 .mobile-nav-inner{
-  min-height:0;overflow:hidden;
   display:flex;flex-direction:column;
-  padding:.3rem 1.5rem 1.3rem;
-  gap:.9rem;
+  padding:.4rem 1.5rem 1.4rem;
+  gap:.3rem;
 }
-.mobile-nav.open{grid-template-rows:1fr}
-.mobile-nav a{text-decoration:none;color:var(--brown-soft);font-size:1rem;transition:color .2s}
-.mobile-nav a:hover{color:var(--terracotta-dark)}
+.mobile-nav a{
+  text-decoration:none;color:var(--brown-soft);font-size:1.02rem;
+  transition:color .2s var(--ease), background .2s var(--ease);
+  padding:.7rem .4rem;border-radius:.6rem;
+}
+.mobile-nav a:hover,.mobile-nav a:active{color:var(--terracotta-dark);background:rgba(193,121,74,.08)}
+.mobile-nav .btn{margin-top:.6rem;justify-content:center}
 
 @media (max-width:820px){
   .nav{display:none}
   .btn-small{display:none}
   .nav-toggle{display:flex}
+  .mobile-nav{
+    display:block;
+    max-height:0;overflow:hidden;
+    transition:max-height .35s var(--ease);
+  }
+  .mobile-nav.open{max-height:28rem}
 }
 
 /* Sections */
 .section{padding:5.5rem 0;position:relative;overflow:hidden}
+@media (max-width:780px){.section{padding:4rem 0}}
+@media (max-width:480px){
+  .section{padding:3.2rem 0}
+  .wrap{padding:0 1.25rem}
+}
 
 /* Scroll reveal */
 [data-reveal]{
@@ -194,8 +212,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--terracotta-dark);ou
 }
 .hero-figure:hover img{transform:rotate(0deg) scale(1.015)}
 @media (max-width:900px){
-  .hero-grid{grid-template-columns:1fr}
+  .hero{padding:3rem 0 3rem}
+  .hero-grid{grid-template-columns:1fr;gap:2.25rem}
   .hero-figure{max-width:22rem;margin:0 auto;order:-1}
+}
+@media (max-width:480px){
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .btn{white-space:normal}
 }
 
 /* Organic blobs + branch */
@@ -206,6 +229,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--terracotta-dark);ou
 .blob-hero-2{width:14rem;height:14rem;bottom:-6rem;right:2rem;opacity:.7}
 .branch{position:absolute;font-size:7rem;color:var(--sage-dark);opacity:.3;z-index:1}
 .branch-hero{top:2rem;right:2rem;transform:rotate(15deg)}
+@media (max-width:900px){
+  .blob-hero-1{width:18rem;height:18rem;top:-6rem;right:-9rem}
+  .blob-hero-2{width:10rem;height:10rem;right:-1rem}
+  .branch-hero{font-size:4.5rem;top:.5rem;right:.5rem;opacity:.22}
+}
 
 /* Sobre */
 .sobre-inner{display:grid;grid-template-columns:.85fr 1.15fr;gap:3.5rem;align-items:center}
@@ -225,6 +253,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--terracotta-dark);ou
 @media (max-width:780px){
   .sobre-inner{grid-template-columns:1fr;gap:2.5rem}
   .sobre-figure{max-width:20rem;margin:0 auto}
+  .blob-sobre{width:8rem;height:8rem;bottom:-1.5rem;left:-1.5rem}
 }
 
 /* Atendimento cards */
@@ -244,6 +273,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--terracotta-dark);ou
 .card:hover .icon-lg{transform:scale(1.1);color:var(--terracotta-dark)}
 .card .icon-lg{transition:transform .3s var(--ease), color .3s var(--ease)}
 @media (max-width:700px){.cards{grid-template-columns:1fr}}
+@media (max-width:480px){.card{padding:1.6rem}}
 
 /* Como funciona */
 .como-funciona{background:var(--cream-2)}
@@ -271,7 +301,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--terracotta-dark);ou
 }
 .feature-list li:hover{transform:translateX(4px);box-shadow:0 8px 20px -10px rgba(74,54,38,.25)}
 .feature-list .icon{color:var(--terracotta)}
-@media (max-width:780px){.como-funciona-inner{grid-template-columns:1fr}.como-funciona-figure{max-width:20rem;margin:0 auto}}
+@media (max-width:780px){
+  .como-funciona-inner{grid-template-columns:1fr}
+  .como-funciona-figure{max-width:20rem;margin:0 auto}
+  .blob-cf{width:13rem;height:13rem;top:-4rem;left:-5rem}
+}
+@media (max-width:480px){
+  .feature-list li{padding:.85rem 1rem;font-size:.95rem}
+}
 
 /* CTA final */
 .cta-final{background:var(--brown);color:var(--white)}
@@ -283,7 +320,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--terracotta-dark);ou
 
 /* Footer */
 .site-footer{background:var(--brown);color:#E9DFD3;padding:2.5rem 0 1.5rem;border-top:1px solid rgba(255,255,255,.08)}
-.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1.5rem}
+.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:1.5rem}
+@media (max-width:480px){
+  .footer-inner{flex-direction:column;gap:1.1rem}
+}
 .footer-name{font-family:var(--font-serif);font-size:1.15rem;color:var(--white);margin:0}
 .footer-crp{margin:.2em 0 0;font-size:.85rem;color:#C9BBAA}
 .footer-links{display:flex;gap:1.5rem;align-items:center}

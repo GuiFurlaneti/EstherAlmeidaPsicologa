@@ -4,18 +4,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileNav = document.getElementById('mobile-nav');
   const header = document.getElementById('site-header');
 
-  toggle.addEventListener('click', () => {
-    const isOpen = mobileNav.classList.toggle('open');
+  const setMenu = (isOpen) => {
+    mobileNav.classList.toggle('open', isOpen);
     toggle.setAttribute('aria-expanded', String(isOpen));
     toggleIcon.className = isOpen ? 'bi bi-x-lg' : 'bi bi-list';
+    mobileNav.style.maxHeight = isOpen ? mobileNav.scrollHeight + 'px' : '';
+    document.body.classList.toggle('nav-open', isOpen);
+  };
+
+  toggle.addEventListener('click', () => {
+    setMenu(!mobileNav.classList.contains('open'));
   });
 
   mobileNav.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      mobileNav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-      toggleIcon.className = 'bi bi-list';
-    });
+    link.addEventListener('click', () => setMenu(false));
+  });
+
+  window.addEventListener('resize', () => {
+    if (mobileNav.classList.contains('open')) {
+      mobileNav.style.maxHeight = mobileNav.scrollHeight + 'px';
+    }
   });
 
   const onScroll = () => {
